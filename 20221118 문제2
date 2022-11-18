@@ -1,0 +1,11 @@
+class Solution {
+    public String solution(int num) {
+        String answer = "";
+        if (num % 2 == 0) {
+            answer = "Even";  // num 을 2로 나눈 결과가 0 이면 짝수니까 answer 의 문자 리럴을 Even 으로
+        } else {
+            answer = "Odd";   // 위에 것이 맞지 않으면 1 이기 때문에 홀수니까 answer 의 문자 리터럴을 Odd 로 한다.
+        }
+        return answer;
+    }
+}
