@@ -1,0 +1,22 @@
+class Solution {
+    public int solution(int n) {
+        String three = Integer.toString(n, 3);
+        // 진수 변환하는 방법을 참고해서 문제를 풀었다.
+        // 위 코드는 받아온 수(10진수)를 3진수로 변환하는 방법이다.
+
+        // 빈 문자열을 선언하고 문자열의 길이를 카운트 변수에 담는다.
+        String str = "";
+        int count = three.length();
+        for (int i = 0; i < three.length(); i++) {
+            str += three.substring(count - 1, count);
+            count--;
+        }
+        // 반복문을 통해서 문자열의 뒤에서부터 str 문자열에 넣어서
+        // 받아온 3진수를 반대로 역순으로 뒤집어준다.
+        // 이 때 카운트 변수를 사용해서 뒤에서부터 가져온다.
+        
+        // 마지막으로 뒤집은 3진수를 다시 10진법으로 변환해주면 끝
+        int answer = Integer.parseInt(str, 3);
+        return answer;
+    }
+}
