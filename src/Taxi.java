@@ -9,7 +9,7 @@ public class Taxi {
     static final int basicKm = 20;
     int reach;
     static final int kmPrice = 300;
-    String state = "";
+    String state = "일반";
 
     public Taxi(int nowGuest, int reach) {
         this.nowGuest = nowGuest;
@@ -37,7 +37,7 @@ public class Taxi {
 
     void getState() {
         if (state.equals("일반") && oil >= 10 || nowGuest > 0) {
-            state = "운행 중";
+            state = "주행 중";
             System.out.println("출발합니다.");
             return;
         } else if (oil < 10) {
@@ -53,7 +53,8 @@ public class Taxi {
         } else {
             total1 = startPrice;
         }
-        if (state.equals("운행 중") && nowGuest <= 4) {
+        if (state.equals("일반") && nowGuest <= 4) {
+            state = "주행 중";
             while (true) {
                 if (oil > 30 && reach > 0) {
                     System.out.println("주행중 입니다.");
@@ -81,14 +82,14 @@ public class Taxi {
     void totalPrice() {
         if (reach > basicKm) {
             System.out.println("예상 요금은 " + (startPrice + ((reach - basicKm) * kmPrice)) + "원 입니다.");
-            state = "주행 중";
+            state = "일반";
         } else {
             System.out.println("예상 요금은 " + startPrice + "원 입니다.");
         }
     }
 
     public static void main(String[] args) {
-        Taxi myTaxi = new Taxi(5, 50);
+        Taxi myTaxi = new Taxi(4, 50);
         myTaxi.run();
     }
 }
