@@ -38,7 +38,6 @@ public class Bus {
         this.rideGuest = rideGuest;
         nowGuest += rideGuest;
         return rideGuest;
-
     }
 
     void setOil(int oil) {
@@ -60,12 +59,16 @@ public class Bus {
     }
 
     void guestCount() {
-        if (nowGuest > maxGuest) {
-            System.out.println("더 이상 승객을 태울 수 없습니다.");
+        if (oil > 10) {
+            if (nowGuest > maxGuest) {
+                System.out.println("더 이상 승객을 태울 수 없습니다.");
+            } else {
+                System.out.println("승객이 " + nowGuest + "명 탑승합니다.");
+                System.out.println("잔여 승객의 수는 : " + (maxGuest - nowGuest) + "명 입니다.");
+                System.out.println("총 요금은 : " + (price * rideGuest) + "원 입니다.");
+            }
         } else {
-            System.out.println("승객이 " + nowGuest + "명 탑승합니다.");
-            System.out.println("잔여 승객의 수는 : " + (maxGuest - nowGuest) + "명 입니다.");
-            System.out.println("총 요금은 : " + (price * rideGuest) + "원 입니다.");
+            return;
         }
     }
 
@@ -78,7 +81,7 @@ public class Bus {
             oil -= 10;
         } else {
             oil = 0;
-            System.out.println("더이상 버스를 운행 할 수가 없습니다.( 현재 oil : " + oil + ")");
+            System.out.println("주유가 필요합니다.( 현재 oil : " + oil + ")");
         }
     }
 

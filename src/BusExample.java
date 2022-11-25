@@ -2,7 +2,6 @@ public class BusExample {
     public static void main(String[] args) {
         Bus myBus = new Bus();
 
-
         System.out.println(myBus.getBusNum());
         myBus.State();
         for (int i = 0; i < 12; i++) {
