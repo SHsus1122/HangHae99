@@ -17,6 +17,7 @@ import java.util.Optional;
 
 // @RequiredArgsConstructor 는 Lombok 으로 스프링에서 DI(의존성 주입)의 방법 중에 생성자 주입을
 // 임의의 코드 없이 자동으로 설정해주는 어노테이션 이다.
+// 커밋 테스트
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
