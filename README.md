@@ -32,7 +32,7 @@
 |:---|:---|:---|:---|
 |GET|/api/boards||
 |GET|/api/boards/{id}|"id": "id"|
-|POST|/api/boards|"boardName"	: "boardName" , "username"	: "username" ,	"password"  : "password" ,	"contents"  : "contents"	|
+|POST|/api/boards|"boardName"	: "boardName" ,<br/> "username"	: "username" ,	"password"  : "password" ,	"contents"  : "contents"	|
 |PUT|/api/boards/{id}|중앙정렬|
 |DELETE|/api/boards/{id}|중앙정렬|
 
