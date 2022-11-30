@@ -30,9 +30,9 @@
 
 |Method|URL|Request|Response|
 |:---|:---|:---|:---|
-|GET|/api/boards||
+|GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |GET|/api/boards/{id}|"id": "id"|
-|POST|/api/boards|{<br/> "boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|
+|POST|/api/boards|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|
 |PUT|/api/boards/{id}|중앙정렬|
 |DELETE|/api/boards/{id}|중앙정렬|
 
