@@ -1,7 +1,6 @@
 # Spring 입문 주차 개인 과제
 간단한 게시판을 구현해서 CRUD 작동까지 해보기
 
---
 
 ## 요구사항
 
@@ -24,46 +23,21 @@
     - 삭제를 요청할 때 비밀번호를 같이 보내서 서버에서 비밀번호 일치 여부를 확인 한 후
     - 선택한 게시글을 삭제하고 Client 로 성공했다는 표시 반환하기
     
---
 
 -----
 
 ## API 명세서
 
-============================================================================================
-Method					URL						         Request							         Response
-GET				 /api/boards											                "crtAt"	 	   : "날짜" ,
-																	                          "modAt" 	   : "날짜" ,
-																		                        "id"		     : 1 ,
-																		                        "boardName"	 : "게시글이름" ,
-																		                        "username"	 : "유저명" ,
-																		                        "contents"	 : "내용"
-																		        
-GET				 /api/boards/{id}		     "id" : "id"			        "crtAt"	 	   : "날짜" ,
-                                                            "modAt" 	   : "날짜" ,
-                                                            "id"		     : 1 ,
-                                                            "boardName"	 : "게시글이름" ,
-                                                            "username"	 : "유저명" ,
-                                                            "contents"	 : "내용"
-                                                            																		                                 
-POST			 /api/boards			  "boardName"	: "boardName" , 	"crtAt"	 	   : "날짜" ,
-								              "username"	: "username" ,	  "modAt" 	   : "날짜" ,
-										          "password"  : "password" ,	  "id"		     : 1 ,
-								              "contents"  : "contents"	    "boardName"	 : "게시글이름" ,
-										                                        "username"	 : "유저명" ,
-										                                        "contents"	 : "내용"
-						
-PUT			   /api/boards/{id}	 "boardName"	: "boardName" , 	"crtAt"	 	   : "날짜" ,
-										         "username"	  : "username" ,	  "modAt" 	   : "날짜" ,
-                              "password"  : "password" ,	  "id"		     : 1 ,
-                              "contents"  : "contents"	    "boardName"	 : "게시글이름" ,
-										                                        "username"	 : "유저명" ,
-										                                        "contents"	 : "내용"
-										
-DELETE		 /api/boards/{id}  "password"  : "password"		    "msg"		     : "msg" ,
-																		                        "result"	   : "true" 
-============================================================================================
-
+|Method|URL|Request|Response|
+|:---|:---|:---|:---|
+|GET|/api/boards||
+|GET|/api/boards/{id}|"id": "id"|
+|POST|/api/boards|"boardName"	: "boardName" , 
+"username"	: "username" ,	
+"password"  : "password" ,	
+"contents"  : "contents"	|
+|PUT|/api/boards/{id}|중앙정렬|
+|DELETE|/api/boards/{id}|중앙정렬|
 
 -----
 
