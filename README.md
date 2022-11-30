@@ -28,8 +28,8 @@
 
 ## API 명세서
 
-> 명세서 
-> 
+<br/>
+
 |Method|URL|Request|Response|
 |:---|:---|:---|:---|
 |GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
@@ -39,6 +39,7 @@
 |DELETE|/api/boards/{id}|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,<br/>"result" : "true"<br/>}|
 
 
+<br/>
 <br/>
 
 ## 과제 제출관련 답변
