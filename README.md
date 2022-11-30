@@ -28,17 +28,15 @@
 
 ## API 명세서
 
------
-
+> 명세서 
 |Method|URL|Request|Response|
 |:---|:---|:---|:---|
 |GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |GET|/api/boards/{id}|{<br/>"id": "id"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |POST|/api/boards|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |PUT|/api/boards/{id}|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|DELETE|/api/boards/{id}|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,"result" : "true"<br/>}|
+|DELETE|/api/boards/{id}|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,<br/>"result" : "true"<br/>}|
 
------
 
 <br/>
 
