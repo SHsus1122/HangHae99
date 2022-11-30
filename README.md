@@ -26,13 +26,10 @@
     
 <br/>
 
------
-
-<br/>
-
 ## API 명세서
 
->
+-----
+
 |Method|URL|Request|Response|
 |:---|:---|:---|:---|
 |GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
