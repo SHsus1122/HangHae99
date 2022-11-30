@@ -2,6 +2,8 @@ package com.sparta.boardhomework.controller;
 
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import com.sparta.boardhomework.dto.BoardResponseDto;
+import com.sparta.boardhomework.dto.DeleteRequestDto;
+import com.sparta.boardhomework.dto.DeleteResponseDto;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +35,13 @@ public class BoardController {
 
     // 게시글 쓰기 API
     @PostMapping("/api/boards")
-    public Board createBoard(@RequestBody BoardRequestDto requestDto) {
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto) {
         return baBoardService.createBoard(requestDto);
     }
 
     // 게시글을 긁어오는 API
     @GetMapping("/api/boards")
-    public List<Board> getBoard() {
+    public List<BoardResponseDto> getBoard() {
         return baBoardService.getBoards();
     }
 
@@ -51,13 +53,13 @@ public class BoardController {
 
     // 게시글 수정 API
     @PutMapping("/api/boards/{id}")
-    public String updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
+    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
         return baBoardService.update(id, requestDto);
     }
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
-    public String deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
+    public DeleteResponseDto deleteBoard(@PathVariable Long id, @RequestBody DeleteRequestDto requestDto) {
         return baBoardService.deleteBoard(id, requestDto);
     }
 }
