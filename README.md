@@ -1,6 +1,7 @@
 # Spring 입문 주차 개인 과제
 간단한 게시판을 구현해서 CRUD 작동까지 해보기
 
+<br/>
 
 ## 요구사항
 
@@ -23,8 +24,11 @@
     - 삭제를 요청할 때 비밀번호를 같이 보내서 서버에서 비밀번호 일치 여부를 확인 한 후
     - 선택한 게시글을 삭제하고 Client 로 성공했다는 표시 반환하기
     
+<br/>
 
 -----
+
+<br/>
 
 ## API 명세서
 
@@ -32,14 +36,16 @@
 |Method|URL|Request|Response|
 |:---|:---|:---|:---|
 |GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|GET|/api/boards/{id}|"id": "id"|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
+|GET|/api/boards/{id}|{<br/>"id": "id"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |POST|/api/boards|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 |PUT|/api/boards/{id}|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|DELETE|/api/boards/{id}|{<br/>"password" : "password"|"msg" : "msg" ,"result" : "true"<br/>}|
+|DELETE|/api/boards/{id}|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,"result" : "true"<br/>}|
 
 -----
 
-##
+<br/>
+
+## 과제 제출관련 답변
 
 1. 수정, 삭제 API의 request를 어떤 방식으로 사용하셨나요? (param, query, body)
 	수정시에는 @PathVariable 으로 id 값을 가져와서 "localhost:8080/api/board/1" 이렇게 url 링크로 접근해서
