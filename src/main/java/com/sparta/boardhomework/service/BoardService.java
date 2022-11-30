@@ -38,8 +38,8 @@ public class BoardService {
     }
 
     // 모든 글 조회
-    // 람다식을 이용해서 처리 (Stream)
-    // 아래의 코드에서 사용된 .map 은 요소들을 특정조건에 해당하는 값으로 변환해 준다.
+    // 람다식을 이용해서 처리 (Stream) 반복 시작
+    // 아래의 코드에서 사용된 .map 은 요소들을 특정조건에 해당하는 값으로 변환해 준다. 함수 실행
     // .collect 는 연산이 끝나고 반환해준다는 의미이다.
     // Collectors.toList 는 반환해 줄 때 리스트 타입으로 반환해준다는 의미이다.
     // 참고링크 : https://codechacha.com/ko/java8-convert-stream-to-list/
@@ -50,6 +50,17 @@ public class BoardService {
                 .map(board -> new BoardResponseDto(board))
                 .collect(Collectors.toList());
     }
+/*    @Transactional
+    public List<BoardResponseDto> getBoards() {
+        List<Board> boardList = boardRepository.findAllByOrderByModifiedAtDesc();
+        List<BoardResponseDto> postResponseDto = new ArrayList<>();
+        for (Board board : boardList) {
+            BoardResponseDto boadrDto = new BoardResponseDto(board);
+            postResponseDto.add(boadrDto);
+        }
+        return postResponseDto;
+    }*/
+
 
     // 게시글 하나 조회하는 부분
 /*    @Transactional
