@@ -37,20 +37,25 @@ public class Board extends TimeStamped {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private Long userId;
+
     // 게시글 작성시 입력 요소
-    public Board(BoardRequestDto requestDto) {
+    public Board(BoardRequestDto requestDto, String username, String password, Long userId) {
         this.boardName = requestDto.getBoardName();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
         this.contents = requestDto.getContents();
+        this.username = username;
+        this.password = password;
+        this.userId = userId;
     }
 
     // 게시글 수정시 입력 요소
-    public void update(BoardRequestDto requestDto) {
+    public void update(BoardRequestDto requestDto, String username, String password, Long userId) {
         this.boardName = requestDto.getBoardName();
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
         this.contents = requestDto.getContents();
+        this.username = username;
+        this.password = password;
+        this.userId = userId;
     }
 }
 

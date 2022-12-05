@@ -7,9 +7,11 @@ import com.sparta.boardhomework.dto.DeleteResponseDto;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +37,8 @@ public class BoardController {
 
     // 게시글 쓰기 API
     @PostMapping("/api/boards")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto) {
-        return baBoardService.createBoard(requestDto);
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+        return baBoardService.createBoard(requestDto, request);
     }
 
     // 게시글을 긁어오는 API
@@ -53,13 +55,13 @@ public class BoardController {
 
     // 게시글 수정 API
     @PutMapping("/api/boards/{id}")
-    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return baBoardService.update(id, requestDto);
+    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+        return baBoardService.update(id, requestDto, request);
     }
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
-    public DeleteResponseDto deleteBoard(@PathVariable Long id, @RequestBody DeleteRequestDto requestDto) {
-        return baBoardService.deleteBoard(id, requestDto);
+    public DeleteResponseDto deleteBoard(@PathVariable Long id, HttpServletRequest request) {
+        return baBoardService.deleteBoard(id, request);
     }
 }

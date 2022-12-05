@@ -2,15 +2,17 @@ package com.sparta.boardhomework.service;
 
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import com.sparta.boardhomework.dto.BoardResponseDto;
-import com.sparta.boardhomework.dto.DeleteRequestDto;
 import com.sparta.boardhomework.dto.DeleteResponseDto;
 import com.sparta.boardhomework.entity.Board;
+import com.sparta.boardhomework.entity.User;
+import com.sparta.boardhomework.jwt.JwtUtil;
 import com.sparta.boardhomework.repository.BoardRepository;
+import com.sparta.boardhomework.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +30,40 @@ public class BoardService {
     private final BoardRepository boardRepository;
     // 위 Repo 를 상수로 지정하는 이유
     // 전체 프로젝트에서 중복되서 생성되면 X 그래서 싱글톤으로 사용
+    private final UserRepository userRepository;
+
+    private final JwtUtil jwtUtil;
+
 
 
     // 글 작성 부분
-    public BoardResponseDto createBoard(BoardRequestDto requestDto) {
-        Board board = new Board(requestDto);
-        boardRepository.save(board);
-        return new BoardResponseDto(board);
+    public BoardResponseDto createBoard(BoardRequestDto requestDto, HttpServletRequest request) {
+        // Request 에서 Token 가져오기
+        // resolveToken 는 컨트롤러 단에서 토큰 검증을 거쳐서 가져오는 메서드
+        // Claims 는 사용자에 대한 프로퍼티나 속성 즉, 토큰 자체가 정보를 가지고있는 방식
+        // JWT 는 이것에 JSON 을 이용해서 정의한다. 이녀석이 페이로드 영역을 생성한다.
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+
+        if (token != null) {
+            // validateToken 토큰 유효성 검사 함수
+            if (jwtUtil.validateToken(token)) {
+                // 유효성 확인 되면 getUserInfoFromToken 을 통해 사용자 정보 가져오기
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
+            // 토큰에서 가져온 사용자 정보를 사용하여 DB 조회
+            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new IllegalArgumentException("사용자 정보가 존재하지 않습니다.")
+            );
+
+            // 요청받은 DTO 로 DB 에 저장할 객체 만들기
+            Board board = boardRepository.saveAndFlush(new Board(requestDto, user.getUsername(), user.getPassword(), user.getId()));
+
+            return new BoardResponseDto(board);
+        } else
+            return null;
     }
 
     // 모든 글 조회
@@ -72,14 +101,43 @@ public class BoardService {
     }*/
     public BoardResponseDto readBoard(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+                () -> new NullPointerException("존재하지 않는 게시글 입니다.")
         );
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
         return boardResponseDto;
     }
 
+
     // 게시글 수정
     @Transactional
+    public BoardResponseDto update(Long id, BoardRequestDto requestDto, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
+
+            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+            );
+
+            Board board = boardRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
+                    () -> new NullPointerException("해당 게시글은 존재하지 않는 게시글 입니다.")
+            );
+
+            board.update(requestDto, user.getUsername(), user.getPassword(), user.getId());
+
+            return new BoardResponseDto(board);
+        } else {
+            return null;
+        }
+    }
+/*
+    // 수정전
     public BoardResponseDto update(Long id, BoardRequestDto requestDto) {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
@@ -90,6 +148,7 @@ public class BoardService {
         }
         return new BoardResponseDto(board);
     }
+    */
 /*    @Transactional
     public String update(Long id ,BoardRequestDto requestDto) {
         String str = "";
@@ -106,19 +165,53 @@ public class BoardService {
 
     // 게시글 삭제
     @Transactional
-    public DeleteResponseDto deleteBoard(Long id, DeleteRequestDto requestDto) {
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
-        );
+    public DeleteResponseDto deleteBoard(Long id, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
 
         DeleteResponseDto responseDto;
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
 
-        if (!board.getPassword().equals(requestDto.getPassword())) {
-            responseDto = new DeleteResponseDto("fail", false);
+            Board board = boardRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+            );
+
+            boardRepository.delete(board);
+
+            responseDto = new DeleteResponseDto("삭제 성공", 200);
+
+            return responseDto;
         } else {
-            boardRepository.deleteById(id);
-            responseDto = new DeleteResponseDto("success", true);
+            responseDto = new DeleteResponseDto("삭제 실패", 500);
+            return responseDto;
         }
-        return responseDto;
     }
+/*    @Transactional
+    public ResponseEntity<Board> deleteBoard(Long id, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+
+        if (token != null) {
+            if (jwtUtil.validateToken(token)) {
+                claims = jwtUtil.getUserInfoFromToken(token);
+            } else {
+                throw new IllegalArgumentException("Token Error");
+            }
+
+            Board board = boardRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+            );
+
+            boardRepository.delete(board);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return responseDto;
+        }
+    }*/
 }

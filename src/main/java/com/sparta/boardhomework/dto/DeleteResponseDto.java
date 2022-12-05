@@ -6,10 +6,10 @@ import lombok.Getter;
 public class DeleteResponseDto {
     private String msg;
 
-    private boolean result;
+    private int statusCode;
 
-    public DeleteResponseDto(String msg, boolean result) {
+    public DeleteResponseDto(String msg, int statusCode) {
         this.msg = msg;
-        this.result = result;
+        this.statusCode = statusCode;
     }
 }
