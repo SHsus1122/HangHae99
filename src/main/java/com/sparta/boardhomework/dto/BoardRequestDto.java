@@ -1,6 +1,5 @@
 package com.sparta.boardhomework.dto;
 
-import com.sparta.boardhomework.entity.Board;
 import lombok.Getter;
 import lombok.Setter;
 

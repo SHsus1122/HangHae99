@@ -14,8 +14,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // List 에 모든 게시글을 담아서 가져온다.
     List<Board> findAllByOrderByModifiedAtDesc();
 
-    List<Board> findAllByUserId(Long userId);
-
     Optional<Board> findByIdAndUserId(Long id, Long userId);
 
     // 게시글 하나만 조회하는 기능

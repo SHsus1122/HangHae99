@@ -3,6 +3,7 @@ package com.sparta.boardhomework.service;
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import com.sparta.boardhomework.dto.BoardResponseDto;
 import com.sparta.boardhomework.dto.DeleteResponseDto;
+import com.sparta.boardhomework.dto.MsgResponseDto;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.entity.User;
 import com.sparta.boardhomework.jwt.JwtUtil;
@@ -10,6 +11,7 @@ import com.sparta.boardhomework.repository.BoardRepository;
 import com.sparta.boardhomework.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -165,11 +167,10 @@ public class BoardService {
 
     // 게시글 삭제
     @Transactional
-    public DeleteResponseDto deleteBoard(Long id, HttpServletRequest request) {
+    public MsgResponseDto deleteBoard(Long id, HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
         Claims claims;
 
-        DeleteResponseDto responseDto;
         if (token != null) {
             if (jwtUtil.validateToken(token)) {
                 claims = jwtUtil.getUserInfoFromToken(token);
@@ -181,14 +182,19 @@ public class BoardService {
                     () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
             );
 
+            if (!claims.getSubject().equals(board.getUsername())) {
+                MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
+                return msg;
+            }
+
             boardRepository.delete(board);
 
-            responseDto = new DeleteResponseDto("삭제 성공", 200);
+            MsgResponseDto msg = new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
 
-            return responseDto;
+            return msg;
         } else {
-            responseDto = new DeleteResponseDto("삭제 실패", 500);
-            return responseDto;
+            MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
+            return msg;
         }
     }
 /*    @Transactional

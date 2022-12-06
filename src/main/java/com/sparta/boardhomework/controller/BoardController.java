@@ -1,12 +1,10 @@
 package com.sparta.boardhomework.controller;
 
-import com.sparta.boardhomework.dto.BoardRequestDto;
-import com.sparta.boardhomework.dto.BoardResponseDto;
-import com.sparta.boardhomework.dto.DeleteRequestDto;
-import com.sparta.boardhomework.dto.DeleteResponseDto;
+import com.sparta.boardhomework.dto.*;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -61,7 +59,7 @@ public class BoardController {
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
-    public DeleteResponseDto deleteBoard(@PathVariable Long id, HttpServletRequest request) {
+    public MsgResponseDto deleteBoard(@PathVariable Long id, HttpServletRequest request) {
         return baBoardService.deleteBoard(id, request);
     }
 }
