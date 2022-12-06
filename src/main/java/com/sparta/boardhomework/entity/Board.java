@@ -18,7 +18,7 @@ import java.util.Optional;
 public class Board extends TimeStamped {
     // 게시글 index 값
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 게시글 제목, 작성자명, 내용 은 null 일 수 없다.

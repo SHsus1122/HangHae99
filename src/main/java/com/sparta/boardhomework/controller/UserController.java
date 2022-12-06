@@ -4,11 +4,9 @@ import com.sparta.boardhomework.dto.LoginRequestDto;
 import com.sparta.boardhomework.dto.MsgResponseDto;
 import com.sparta.boardhomework.dto.SignupRequestDto;
 import com.sparta.boardhomework.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,14 +15,15 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
+/*    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
-    }
+    }*/
 
     @GetMapping("/login")
     public ModelAndView loginpage() {
@@ -40,7 +39,15 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<MsgResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
-        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
+
+        // builder 패턴
+        // 순서 상관없이 사용이 가능하다.
+        return ResponseEntity.ok(MsgResponseDto.builder()
+                .statusCode(HttpStatus.OK.value())
+                .msg("회원가입 완료")
+                .build());
+
+//        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
     }
 
     @ResponseBody

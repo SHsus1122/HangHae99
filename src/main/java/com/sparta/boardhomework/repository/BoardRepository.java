@@ -18,4 +18,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     // 게시글 하나만 조회하는 기능
     Optional<Board> findById(Long id);
+
 }

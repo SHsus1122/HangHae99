@@ -1,6 +1,7 @@
 package com.sparta.boardhomework.dto;
 
 import com.sparta.boardhomework.entity.Board;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,6 @@ public class BoardResponseDto {
     private String boardName;
     private String username;
     private String contents;
-
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();

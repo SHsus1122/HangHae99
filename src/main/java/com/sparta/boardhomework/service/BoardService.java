@@ -61,7 +61,7 @@ public class BoardService {
             );
 
             // 요청받은 DTO 로 DB 에 저장할 객체 만들기
-            Board board = boardRepository.saveAndFlush(new Board(requestDto, user.getUsername(), user.getPassword(), user.getId()));
+            Board board = boardRepository.save(new Board(requestDto, user.getUsername(), user.getPassword(), user.getId()));
 
             return new BoardResponseDto(board);
         } else
@@ -128,7 +128,7 @@ public class BoardService {
             );
 
             Board board = boardRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-                    () -> new NullPointerException("해당 게시글은 존재하지 않는 게시글 입니다.")
+                    () -> new IllegalArgumentException("해당 게시글에 대한 권한이 없습니다.")
             );
 
             board.update(requestDto, user.getUsername(), user.getPassword(), user.getId());
