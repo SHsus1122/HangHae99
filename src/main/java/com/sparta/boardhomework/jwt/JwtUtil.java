@@ -65,7 +65,6 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token) {
-        System.out.println(token);
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;

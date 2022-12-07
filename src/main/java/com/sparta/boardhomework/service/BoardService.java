@@ -2,7 +2,6 @@ package com.sparta.boardhomework.service;
 
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import com.sparta.boardhomework.dto.BoardResponseDto;
-import com.sparta.boardhomework.dto.DeleteResponseDto;
 import com.sparta.boardhomework.dto.MsgResponseDto;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.entity.User;
@@ -39,6 +38,7 @@ public class BoardService {
 
 
     // 글 작성 부분
+    @Transactional
     public BoardResponseDto createBoard(BoardRequestDto requestDto, HttpServletRequest request) {
         // Request 에서 Token 가져오기
         // resolveToken 는 컨트롤러 단에서 토큰 검증을 거쳐서 가져오는 메서드
@@ -71,6 +71,7 @@ public class BoardService {
     // 모든 글 조회
     // 람다식을 이용해서 처리 (Stream) 반복 시작
     // 아래의 코드에서 사용된 .map 은 요소들을 특정조건에 해당하는 값으로 변환해 준다. 함수 실행
+    // .map 중간 연산자, collect 최종연산자
     // .collect 는 연산이 끝나고 반환해준다는 의미이다.
     // Collectors.toList 는 반환해 줄 때 리스트 타입으로 반환해준다는 의미이다.
     // 참고링크 : https://codechacha.com/ko/java8-convert-stream-to-list/
@@ -123,6 +124,8 @@ public class BoardService {
                 throw new IllegalArgumentException("Token Error");
             }
 
+            // 유효성 검사 db 에 접근
+            // 정규식의 이유는 DB 에 접근하지 않고 우선 걸러주기 위해
             User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
             );
@@ -182,6 +185,7 @@ public class BoardService {
                     () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
             );
 
+            // 유효성 검사
             if (!claims.getSubject().equals(board.getUsername())) {
                 MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
                 return msg;
@@ -189,12 +193,9 @@ public class BoardService {
 
             boardRepository.delete(board);
 
-            MsgResponseDto msg = new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
-
-            return msg;
+            return new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
         } else {
-            MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
-            return msg;
+            return new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
         }
     }
 /*    @Transactional

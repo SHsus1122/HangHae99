@@ -26,7 +26,7 @@ public class UserController {
     }*/
 
     @GetMapping("/login")
-    public ModelAndView loginpage() {
+    public ModelAndView loginPage() {
         return new ModelAndView("login");
     }
 
@@ -35,7 +35,6 @@ public class UserController {
         return new ModelAndView("signup");
     }
 
-    @ResponseBody
     @PostMapping("/signup")
     public ResponseEntity<MsgResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
@@ -50,7 +49,6 @@ public class UserController {
 //        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
     }
 
-    @ResponseBody
     @PostMapping("/login")
     public MsgResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.login(loginRequestDto, response);

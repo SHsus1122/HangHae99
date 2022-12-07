@@ -2,13 +2,10 @@ package com.sparta.boardhomework.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.boardhomework.dto.BoardRequestDto;
-import com.sparta.boardhomework.dto.BoardResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 // @NoArgsConstructor 파라미터가 없는 기본 생성자를 생성해준다.
 // Board board = new Board(); 이러한 것을 말한다...

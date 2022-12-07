@@ -1,9 +1,6 @@
 package com.sparta.boardhomework.repository;
 
-import com.sparta.boardhomework.dto.BoardRequestDto;
-import com.sparta.boardhomework.dto.BoardResponseDto;
 import com.sparta.boardhomework.entity.Board;
-import com.sparta.boardhomework.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

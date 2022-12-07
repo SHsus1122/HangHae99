@@ -1,10 +1,8 @@
 package com.sparta.boardhomework.dto;
 
 import com.sparta.boardhomework.entity.Board;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Getter

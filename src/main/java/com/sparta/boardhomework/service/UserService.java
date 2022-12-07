@@ -6,13 +6,10 @@ import com.sparta.boardhomework.entity.User;
 import com.sparta.boardhomework.entity.UserRoleEnum;
 import com.sparta.boardhomework.jwt.JwtUtil;
 import com.sparta.boardhomework.repository.UserRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -31,6 +28,7 @@ public class UserService {
     public void signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
+        String adminToken = signupRequestDto.getAdminToken();
 
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {

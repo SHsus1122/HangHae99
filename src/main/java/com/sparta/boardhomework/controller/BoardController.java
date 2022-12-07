@@ -1,18 +1,13 @@
 package com.sparta.boardhomework.controller;
 
 import com.sparta.boardhomework.dto.*;
-import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 
 // RestController 는 Controller 어노테이션에 ResponseBody 가 결합된 형태의 어노테이션
