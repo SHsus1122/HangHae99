@@ -41,14 +41,19 @@
 
 <br/>
 
-|Method|URL|Request|Response|
-|:---|:---|:---|:---|
-|GET|/api/boards||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|GET|/api/boards/{id}|{<br/>"id": "id"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|POST|/api/boards|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|PUT|/api/boards/{id}|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
-|DELETE|/api/boards/{id}|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,<br/>"result" : "true"<br/>}|
+|기능|API URL|Method|Request Header|Request|Response|Response header|
+|:---|:---|:---|:---|:---|:---|:---|
+|회원가입|/api/signup|POST||{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
 
+|로그인|/api/login/{id}|{<br/>"id": "id"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
+
+|게시글 작성|/api/boards|POST|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
+
+|게시글 목록 조회|/api/boards|POST|{<br/>"boardName" : "boardName" ,<br/>"username" : "username" ,<br/>"password" : "password" ,<br/>"contents" : "contents"<br/>}|{<br/>"crtAt" : "날짜" ,<br/>"modAt" : "날짜" ,<br/>"id" : 1 ,<br/>"boardName" : "게시글이름" ,<br/>"username" : "유저명" ,<br/>"contents" : "내용"<br/>}|
+
+|게시글 상세 조회|/api/boards/{id}|GET|{<br/>"password" : "password"<br/>}|{<br/>"msg" : "msg" ,<br/>"result" : "true"<br/>}|
+|게시글 수정|/api/boards/{id}|PUT|
+|게시글 삭제|/api/boards/{id}|DELETE|
 
 <br/>
 <br/>
