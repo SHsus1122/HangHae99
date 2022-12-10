@@ -28,7 +28,6 @@ public class UserService {
     public void signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
         String password = signupRequestDto.getPassword();
-        String adminToken = signupRequestDto.getAdminToken();
 
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {

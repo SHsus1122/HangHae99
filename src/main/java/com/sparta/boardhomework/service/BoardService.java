@@ -130,9 +130,18 @@ public class BoardService {
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
             );
 
-            Board board = boardRepository.findByIdAndUserId(id, user.getId()).orElseThrow(
-                    () -> new IllegalArgumentException("해당 게시글에 대한 권한이 없습니다.")
+            Board board = boardRepository.findById(id).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
             );
+
+            System.out.println("board.getUserId() : " + board.getUserId());
+            System.out.println("user.getId() : " + user.getId());
+
+            System.out.println("board.getUserId().equals(user.getId()) : " + board.getUserId().equals(user.getId()));
+
+            if (!board.getUserId().equals(user.getId())) {
+                throw new IllegalArgumentException("해당 게시글에 대한 수정 권한이 없습니다.");
+            }
 
             board.update(requestDto, user.getUsername(), user.getPassword(), user.getId());
 
@@ -181,11 +190,15 @@ public class BoardService {
                 throw new IllegalArgumentException("Token Error");
             }
 
+            // boardRepository 를 예로
+            // db 에 들어가서 정보를 찾는데 해당 정보가 존재하지 않는 경우 예외 처리라고 한다.
+            // 예외 발생에 대처를 한다는 개념
             Board board = boardRepository.findById(id).orElseThrow(
                     () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
             );
 
             // 유효성 검사
+            // 데이터가 옳바른지 확인하는 개념
             if (!claims.getSubject().equals(board.getUsername())) {
                 MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
                 return msg;
