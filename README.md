@@ -67,6 +67,11 @@
 </div>
 </details>
 
+## ERD
+
+![image](https://user-images.githubusercontent.com/116439064/206386158-72ef6a41-acae-4973-afb5-b2c094134858.png)
+
+
 ## API 명세서
 
 <br/>
