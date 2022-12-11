@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -12,9 +14,10 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "USER_ID")
+    private Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "USERNAME", nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -24,9 +27,18 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    // Board(게시글) 이 참조하는 관계
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
+
+    // Comment(댓글) 이 참조하는 관계
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
+
 }

@@ -5,14 +5,14 @@ import com.sparta.boardhomework.dto.BoardResponseDto;
 import com.sparta.boardhomework.dto.MsgResponseDto;
 import com.sparta.boardhomework.entity.Board;
 import com.sparta.boardhomework.entity.User;
-import com.sparta.boardhomework.jwt.JwtUtil;
+import com.sparta.boardhomework.entity.UserRoleEnum;
 import com.sparta.boardhomework.repository.BoardRepository;
+import com.sparta.boardhomework.repository.CommentRepository;
 import com.sparta.boardhomework.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,12 +33,11 @@ public class BoardService {
     // 전체 프로젝트에서 중복되서 생성되면 X 그래서 싱글톤으로 사용
     private final UserRepository userRepository;
 
-    private final JwtUtil jwtUtil;
-
+    private final CommentRepository commentRepository;
 
 
     // 글 작성 부분
-    @Transactional
+/*    @Transactional
     public BoardResponseDto createBoard(BoardRequestDto requestDto, HttpServletRequest request) {
         // Request 에서 Token 가져오기
         // resolveToken 는 컨트롤러 단에서 토큰 검증을 거쳐서 가져오는 메서드
@@ -66,7 +65,22 @@ public class BoardService {
             return new BoardResponseDto(board);
         } else
             return null;
+    }*/
+    @Transactional
+    public BoardResponseDto createBoard(BoardRequestDto requestDto, User user) {
+
+        if (user != null) {
+            Board board = boardRepository.saveAndFlush(new Board(requestDto,
+                    user.getUsername(),
+                    user.getPassword(),
+                    user));
+
+            return new BoardResponseDto(board);
+        }
+
+        return null;
     }
+
 
     // 모든 글 조회
     // 람다식을 이용해서 처리 (Stream) 반복 시작
@@ -102,53 +116,44 @@ public class BoardService {
         );
         return boardRepository.findById(id);
     }*/
-    public BoardResponseDto readBoard(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(
+    /*public BoardResponseDto readBoard(Long id) {
+        Board board = boardRepository.findByBoardId(id).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 게시글 입니다.")
         );
-        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
-        return boardResponseDto;
+
+        return new BoardResponseDto(board);
+    }*/
+    public BoardResponseDto readBoard(Long id) {
+        Board board = boardRepository.findByBoardId(id).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 게시글 입니다.")
+        );
+
+        return new BoardResponseDto(board);
     }
 
 
     // 게시글 수정
     @Transactional
-    public BoardResponseDto update(Long id, BoardRequestDto requestDto, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims;
+    public BoardResponseDto update(Long id, BoardRequestDto requestDto, User user) {
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token Error");
-            }
+        // 유효성 검사 db 에 접근
+        // 정규식의 이유는 DB 에 접근하지 않고 우선 걸러주기 위해
+        user = userRepository.findByUsername(user.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );
 
-            // 유효성 검사 db 에 접근
-            // 정규식의 이유는 DB 에 접근하지 않고 우선 걸러주기 위해
-            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-            );
+        Board board = boardRepository.findByBoardId(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+        );
 
-            Board board = boardRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
-            );
-
-            System.out.println("board.getUserId() : " + board.getUserId());
-            System.out.println("user.getId() : " + user.getId());
-
-            System.out.println("board.getUserId().equals(user.getId()) : " + board.getUserId().equals(user.getId()));
-
-            if (!board.getUserId().equals(user.getId())) {
-                throw new IllegalArgumentException("해당 게시글에 대한 수정 권한이 없습니다.");
-            }
-
-            board.update(requestDto, user.getUsername(), user.getPassword(), user.getId());
-
-            return new BoardResponseDto(board);
+        if (board.getUsername().equals(user.getUsername()) || user.getRole() == UserRoleEnum.ADMIN) {
+            board.update(requestDto, user.getUsername(), user.getPassword());
         } else {
-            return null;
+            throw new IllegalArgumentException("해당 게시글에 대한 수정 권한이 없습니다.");
         }
+
+        return new BoardResponseDto(board);
+
     }
 /*
     // 수정전
@@ -179,37 +184,24 @@ public class BoardService {
 
     // 게시글 삭제
     @Transactional
-    public MsgResponseDto deleteBoard(Long id, HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        Claims claims;
+    public MsgResponseDto deleteBoard(Long id, User user) {
+        // boardRepository 를 예로
+        // db 에 들어가서 정보를 찾는데 해당 정보가 존재하지 않는 경우 예외 처리라고 한다.
+        // 예외 발생에 대처를 한다는 개념
+        Board board = boardRepository.findByBoardId(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+        );
 
-        if (token != null) {
-            if (jwtUtil.validateToken(token)) {
-                claims = jwtUtil.getUserInfoFromToken(token);
-            } else {
-                throw new IllegalArgumentException("Token Error");
-            }
-
-            // boardRepository 를 예로
-            // db 에 들어가서 정보를 찾는데 해당 정보가 존재하지 않는 경우 예외 처리라고 한다.
-            // 예외 발생에 대처를 한다는 개념
-            Board board = boardRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
-            );
-
-            // 유효성 검사
-            // 데이터가 옳바른지 확인하는 개념
-            if (!claims.getSubject().equals(board.getUsername())) {
-                MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
-                return msg;
-            }
-
+        // 유효성 검사
+        // 데이터가 올바른지 확인하는 개념
+        if (user.getUsername().equals(board.getUsername()) || user.getRole() == UserRoleEnum.ADMIN) {
             boardRepository.delete(board);
-
-            return new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
         } else {
-            return new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
+            MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
+            return msg;
         }
+
+        return new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
     }
 /*    @Transactional
     public ResponseEntity<Board> deleteBoard(Long id, HttpServletRequest request) {

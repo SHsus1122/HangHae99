@@ -1,12 +1,12 @@
 package com.sparta.boardhomework.controller;
 
 import com.sparta.boardhomework.dto.*;
+import com.sparta.boardhomework.security.UserDetailsImpl;
 import com.sparta.boardhomework.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -24,15 +24,16 @@ public class BoardController {
     private final BoardService baBoardService;
 
     // 기본 사이트 접근시 페이지
-    @GetMapping("/")
-    public ModelAndView home() {
-        return new ModelAndView("index");
-    }
+//    @GetMapping("/")
+//    public ModelAndView home() {
+//        return new ModelAndView("index");
+//    }
 
     // 게시글 쓰기 API
     @PostMapping("/api/boards")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
-        return baBoardService.createBoard(requestDto, request);
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return baBoardService.createBoard(requestDto, userDetails.getUser());
     }
 
     // 게시글을 긁어오는 API
@@ -49,13 +50,16 @@ public class BoardController {
 
     // 게시글 수정 API
     @PutMapping("/api/boards/{id}")
-    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
-        return baBoardService.update(id, requestDto, request);
+    public BoardResponseDto updateBoard(@PathVariable Long id,
+                                        @RequestBody BoardRequestDto requestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return baBoardService.update(id, requestDto, userDetails.getUser());
     }
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
-    public MsgResponseDto deleteBoard(@PathVariable Long id, HttpServletRequest request) {
-        return baBoardService.deleteBoard(id, request);
+    public MsgResponseDto deleteBoard(@PathVariable Long id,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return baBoardService.deleteBoard(id, userDetails.getUser());
     }
 }

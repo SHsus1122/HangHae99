@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -22,9 +23,11 @@ public class TimeStamped {
 
     // 게시글 작성시점 날짜 자동 업데이트
     @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     // 게시글 수정시점 날짜 자동 업데이트
     @LastModifiedDate
+    @Column
     private LocalDateTime modifiedAt;
 }

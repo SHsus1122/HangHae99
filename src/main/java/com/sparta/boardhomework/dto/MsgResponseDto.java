@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Getter
 @Builder
 //@AllArgsConstructor
+@NoArgsConstructor
 public class MsgResponseDto {
     private String msg;
     private int statusCode;

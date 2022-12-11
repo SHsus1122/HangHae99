@@ -25,7 +25,7 @@ public class UserController {
         this.userService = userService;
     }*/
 
-    @GetMapping("/login")
+/*    @GetMapping("/login")
     public ModelAndView loginPage() {
         return new ModelAndView("login");
     }
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/signup")
     public ModelAndView signupPage() {
         return new ModelAndView("signup");
-    }
+    }*/
 
     @PostMapping("/signup")
     public ResponseEntity<MsgResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
@@ -41,17 +41,34 @@ public class UserController {
 
         // builder 패턴
         // 순서 상관없이 사용이 가능하다.
-        return ResponseEntity.ok(MsgResponseDto.builder()
-                .statusCode(HttpStatus.OK.value())
-                .msg("회원가입 완료")
-                .build());
+//        return ResponseEntity.ok(MsgResponseDto.builder()
+//                .statusCode(HttpStatus.OK.value())
+//                .msg("회원가입 완료")
+//                .build());
 
-//        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
+        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<MsgResponseDto> login(@RequestBody LoginRequestDto loginRequestDto,
+//                                              HttpServletResponse response) {
+//
+//        userService.login(loginRequestDto, response);
+//
+//        return ResponseEntity.ok(new MsgResponseDto("로그인 성공", HttpStatus.OK.value()));
+//    }
+
+
     @PostMapping("/login")
-    public MsgResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<MsgResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {//클라이언트에 반환하기 위해 response객체
         userService.login(loginRequestDto, response);
-        return new MsgResponseDto("로그인 성공", HttpStatus.OK.value());
+
+        return ResponseEntity.ok(new MsgResponseDto("로그인 성공", HttpStatus.OK.value()));
+    }
+
+
+    @PostMapping("forbidden")
+    public ModelAndView forbidden() {
+        return new ModelAndView("forbidden");
     }
 }
