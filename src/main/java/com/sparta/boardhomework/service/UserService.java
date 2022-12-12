@@ -69,7 +69,7 @@ public class UserService {
 //        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
 //    }
 
-    //로그인
+    // 로그인
     @Transactional(readOnly = true)
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
@@ -79,6 +79,7 @@ public class UserService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
         );
+
         // 비밀번호 확인
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");

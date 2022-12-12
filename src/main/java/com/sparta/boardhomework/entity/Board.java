@@ -1,6 +1,8 @@
 package com.sparta.boardhomework.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +39,9 @@ public class Board extends TimeStamped {
     @Column(nullable = false)
     private String password;
 
+//    @Column
+//    private Long likeCount;
+
 //    @Column(nullable = false)
 //    private Long userId;
 
@@ -50,7 +55,11 @@ public class Board extends TimeStamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    // 게시글 작성시 입력 요소
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<BoardLike> boardLikes = new ArrayList<>();
+
+    // 게시글 작성시 입력
+    // 요소
     public Board(BoardRequestDto requestDto, String username, String password, User user) {
         this.boardName = requestDto.getBoardName();
         this.contents = requestDto.getContents();
@@ -66,5 +75,7 @@ public class Board extends TimeStamped {
         this.username = username;
         this.password = password;
     }
+
+
 }
 

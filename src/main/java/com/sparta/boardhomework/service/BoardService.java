@@ -1,11 +1,8 @@
 package com.sparta.boardhomework.service;
 
-import com.sparta.boardhomework.dto.BoardRequestDto;
-import com.sparta.boardhomework.dto.BoardResponseDto;
-import com.sparta.boardhomework.dto.MsgResponseDto;
-import com.sparta.boardhomework.entity.Board;
-import com.sparta.boardhomework.entity.User;
-import com.sparta.boardhomework.entity.UserRoleEnum;
+import com.sparta.boardhomework.dto.*;
+import com.sparta.boardhomework.entity.*;
+import com.sparta.boardhomework.repository.BoardLikeRepository;
 import com.sparta.boardhomework.repository.BoardRepository;
 import com.sparta.boardhomework.repository.CommentRepository;
 import com.sparta.boardhomework.repository.UserRepository;
@@ -14,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +31,11 @@ public class BoardService {
     // 전체 프로젝트에서 중복되서 생성되면 X 그래서 싱글톤으로 사용
     private final UserRepository userRepository;
 
+    private final BoardLikeRepository boardLikeRepository;
+
     private final CommentRepository commentRepository;
+
+
 
 
     // 글 작성 부분
@@ -90,11 +92,28 @@ public class BoardService {
     // Collectors.toList 는 반환해 줄 때 리스트 타입으로 반환해준다는 의미이다.
     // 참고링크 : https://codechacha.com/ko/java8-convert-stream-to-list/
     // 참고링크 : https://dpdpwl.tistory.com/81
-    public List<BoardResponseDto> getBoards() {
+    public BoardListResponseDto getBoards() {
+        BoardListResponseDto boardListResponseDto = new BoardListResponseDto();
+
         List<Board> ListBoard = boardRepository.findAllByOrderByModifiedAtDesc();
-        return ListBoard.stream()
-                .map(board -> new BoardResponseDto(board))
-                .collect(Collectors.toList());
+
+        // (타입 변수명 : 배열)
+        // ListBoard 가 3 사이즈의 배열이라고 가정하면 5번을 돈다. (도는 횟수 -> ListBoard.size())
+        for (Board board : ListBoard) {
+
+            List<CommentResponseDto> commentList = new ArrayList<>();
+
+            for (Comment comment : board.getComments()) {
+                commentList.add(new CommentResponseDto(comment));
+            }
+
+            boardListResponseDto.addBoard(new BoardResponseDto(board, commentList));
+        }
+
+        return boardListResponseDto;
+//        return ListBoard.stream()
+//                .map(board -> new BoardResponseDto(board))
+//                .collect(Collectors.toList());
     }
 /*    @Transactional
     public List<BoardResponseDto> getBoards() {
@@ -128,7 +147,11 @@ public class BoardService {
                 () -> new NullPointerException("존재하지 않는 게시글 입니다.")
         );
 
-        return new BoardResponseDto(board);
+        List<CommentResponseDto> dtos = new ArrayList<>();
+        for (Comment commentList : board.getComments()) {
+            dtos.add(new CommentResponseDto(commentList));
+        }
+        return new BoardResponseDto(board, dtos);
     }
 
 

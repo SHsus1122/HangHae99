@@ -1,5 +1,6 @@
 package com.sparta.boardhomework.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +35,12 @@ public class User {
     // Comment(댓글) 이 참조하는 관계
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<BoardLike> boardLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;

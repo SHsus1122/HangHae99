@@ -3,11 +3,10 @@ package com.sparta.boardhomework.controller;
 import com.sparta.boardhomework.dto.*;
 import com.sparta.boardhomework.security.UserDetailsImpl;
 import com.sparta.boardhomework.service.BoardService;
+import com.sparta.boardhomework.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 // RestController 는 Controller 어노테이션에 ResponseBody 가 결합된 형태의 어노테이션
@@ -21,7 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
 
-    private final BoardService baBoardService;
+    private final BoardService boardService;
+    private final LikeService likeService;
 
     // 기본 사이트 접근시 페이지
 //    @GetMapping("/")
@@ -33,19 +33,19 @@ public class BoardController {
     @PostMapping("/api/boards")
     public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return baBoardService.createBoard(requestDto, userDetails.getUser());
+        return boardService.createBoard(requestDto, userDetails.getUser());
     }
 
     // 게시글을 긁어오는 API
     @GetMapping("/api/boards")
-    public List<BoardResponseDto> getBoard() {
-        return baBoardService.getBoards();
+    public BoardListResponseDto getBoard() {
+        return boardService.getBoards();
     }
 
     // 게시글 선택해서 읽기
     @GetMapping("/api/boards/{id}")
     public BoardResponseDto readBoard(@PathVariable Long id) {
-        return baBoardService.readBoard(id);
+        return boardService.readBoard(id);
     }
 
     // 게시글 수정 API
@@ -53,13 +53,14 @@ public class BoardController {
     public BoardResponseDto updateBoard(@PathVariable Long id,
                                         @RequestBody BoardRequestDto requestDto,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return baBoardService.update(id, requestDto, userDetails.getUser());
+        return boardService.update(id, requestDto, userDetails.getUser());
     }
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
     public MsgResponseDto deleteBoard(@PathVariable Long id,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return baBoardService.deleteBoard(id, userDetails.getUser());
+        return boardService.deleteBoard(id, userDetails.getUser());
     }
+
 }
