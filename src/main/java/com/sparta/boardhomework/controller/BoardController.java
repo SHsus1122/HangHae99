@@ -3,8 +3,8 @@ package com.sparta.boardhomework.controller;
 import com.sparta.boardhomework.dto.*;
 import com.sparta.boardhomework.security.UserDetailsImpl;
 import com.sparta.boardhomework.service.BoardService;
-import com.sparta.boardhomework.service.LikeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
     private final BoardService boardService;
-    private final LikeService likeService;
 
     // 기본 사이트 접근시 페이지
 //    @GetMapping("/")
@@ -58,9 +57,10 @@ public class BoardController {
 
     // 게시글 삭제 API
     @DeleteMapping("/api/boards/{id}")
-    public MsgResponseDto deleteBoard(@PathVariable Long id,
-                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.deleteBoard(id, userDetails.getUser());
+    public PassResponseDto deleteBoard(@PathVariable Long id,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        boardService.deleteBoard(id, userDetails.getUser());
+        return new PassResponseDto(HttpStatus.OK.value(), "삭제 완료");
     }
 
 }

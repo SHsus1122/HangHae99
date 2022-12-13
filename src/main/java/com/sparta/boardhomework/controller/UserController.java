@@ -1,12 +1,11 @@
 package com.sparta.boardhomework.controller;
 
 import com.sparta.boardhomework.dto.LoginRequestDto;
-import com.sparta.boardhomework.dto.MsgResponseDto;
+import com.sparta.boardhomework.dto.PassResponseDto;
 import com.sparta.boardhomework.dto.SignupRequestDto;
 import com.sparta.boardhomework.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,7 +35,7 @@ public class UserController {
     }*/
 
     @PostMapping("/signup")
-    public ResponseEntity<MsgResponseDto> signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
+    public PassResponseDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
 
         // builder 패턴
@@ -46,7 +45,7 @@ public class UserController {
 //                .msg("회원가입 완료")
 //                .build());
 
-        return ResponseEntity.ok(new MsgResponseDto("회원 가입 완료", HttpStatus.OK.value()));
+        return new PassResponseDto(HttpStatus.OK.value(), "회원 가입 완료");
     }
 
 //    @PostMapping("/login")
@@ -60,10 +59,11 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<MsgResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {//클라이언트에 반환하기 위해 response객체
+    public PassResponseDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        //클라이언트에 반환하기 위해 response 객체
         userService.login(loginRequestDto, response);
 
-        return ResponseEntity.ok(new MsgResponseDto("로그인 성공", HttpStatus.OK.value()));
+        return new PassResponseDto(HttpStatus.OK.value(), "로그인 완료");
     }
 
 

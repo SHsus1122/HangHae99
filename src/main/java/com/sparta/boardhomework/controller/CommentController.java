@@ -4,6 +4,7 @@ import com.sparta.boardhomework.dto.*;
 import com.sparta.boardhomework.security.UserDetailsImpl;
 import com.sparta.boardhomework.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +33,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public MsgResponseDto deleteComment(@PathVariable Long id,
-                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.deleteComment(id, userDetails.getUser());
+    public PassResponseDto deleteComment(@PathVariable Long id,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        commentService.deleteComment(id, userDetails.getUser());
+        return new PassResponseDto(HttpStatus.OK.value(), "삭제 완료");
     }
 }

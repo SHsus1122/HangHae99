@@ -2,9 +2,9 @@ package com.sparta.boardhomework.service;
 
 import com.sparta.boardhomework.dto.*;
 import com.sparta.boardhomework.entity.*;
-import com.sparta.boardhomework.repository.BoardLikeRepository;
+import com.sparta.boardhomework.exception.CustomException;
+import com.sparta.boardhomework.exception.ErrorCode;
 import com.sparta.boardhomework.repository.BoardRepository;
-import com.sparta.boardhomework.repository.CommentRepository;
 import com.sparta.boardhomework.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 // 참고링크 : https://velog.io/@developerjun0615/Spring-RequiredArgsConstructor-%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%83%9D%EC%84%B1%EC%9E%90-%EC%A3%BC%EC%9E%85
 // @RequiredArgsConstructor 은 lombok 을 사용하여 생성자 주입을 더 간단하게 해준다.
@@ -30,12 +29,6 @@ public class BoardService {
     // 위 Repo 를 상수로 지정하는 이유
     // 전체 프로젝트에서 중복되서 생성되면 X 그래서 싱글톤으로 사용
     private final UserRepository userRepository;
-
-    private final BoardLikeRepository boardLikeRepository;
-
-    private final CommentRepository commentRepository;
-
-
 
 
     // 글 작성 부분
@@ -71,16 +64,13 @@ public class BoardService {
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto requestDto, User user) {
 
-        if (user != null) {
-            Board board = boardRepository.saveAndFlush(new Board(requestDto,
-                    user.getUsername(),
-                    user.getPassword(),
-                    user));
+        Board board = boardRepository.saveAndFlush(new Board(requestDto,
+                user.getUsername(),
+                user.getPassword(),
+                user));
 
-            return new BoardResponseDto(board);
-        }
+        return new BoardResponseDto(board);
 
-        return null;
     }
 
 
@@ -144,7 +134,7 @@ public class BoardService {
     }*/
     public BoardResponseDto readBoard(Long id) {
         Board board = boardRepository.findByBoardId(id).orElseThrow(
-                () -> new NullPointerException("존재하지 않는 게시글 입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
         );
 
         List<CommentResponseDto> dtos = new ArrayList<>();
@@ -162,17 +152,17 @@ public class BoardService {
         // 유효성 검사 db 에 접근
         // 정규식의 이유는 DB 에 접근하지 않고 우선 걸러주기 위해
         user = userRepository.findByUsername(user.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         Board board = boardRepository.findByBoardId(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
         );
 
         if (board.getUsername().equals(user.getUsername()) || user.getRole() == UserRoleEnum.ADMIN) {
             board.update(requestDto, user.getUsername(), user.getPassword());
         } else {
-            throw new IllegalArgumentException("해당 게시글에 대한 수정 권한이 없습니다.");
+            throw new CustomException(ErrorCode.INVALID_AUTH_BOARD);
         }
 
         return new BoardResponseDto(board);
@@ -207,12 +197,12 @@ public class BoardService {
 
     // 게시글 삭제
     @Transactional
-    public MsgResponseDto deleteBoard(Long id, User user) {
+    public PassResponseDto deleteBoard(Long id, User user) {
         // boardRepository 를 예로
         // db 에 들어가서 정보를 찾는데 해당 정보가 존재하지 않는 경우 예외 처리라고 한다.
         // 예외 발생에 대처를 한다는 개념
         Board board = boardRepository.findByBoardId(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
         );
 
         // 유효성 검사
@@ -220,11 +210,10 @@ public class BoardService {
         if (user.getUsername().equals(board.getUsername()) || user.getRole() == UserRoleEnum.ADMIN) {
             boardRepository.delete(board);
         } else {
-            MsgResponseDto msg = new MsgResponseDto("삭제 실패", HttpStatus.FAILED_DEPENDENCY.value());
-            return msg;
+            throw new CustomException(ErrorCode.INVALID_AUTH_BOARD);
         }
 
-        return new MsgResponseDto("삭제 성공", HttpStatus.OK.value());
+        return new PassResponseDto(HttpStatus.OK.value(), "삭제 성공");
     }
 /*    @Transactional
     public ResponseEntity<Board> deleteBoard(Long id, HttpServletRequest request) {

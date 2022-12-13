@@ -4,6 +4,8 @@ import com.sparta.boardhomework.dto.LoginRequestDto;
 import com.sparta.boardhomework.dto.SignupRequestDto;
 import com.sparta.boardhomework.entity.User;
 import com.sparta.boardhomework.entity.UserRoleEnum;
+import com.sparta.boardhomework.exception.CustomException;
+import com.sparta.boardhomework.exception.ErrorCode;
 import com.sparta.boardhomework.jwt.JwtUtil;
 import com.sparta.boardhomework.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +36,14 @@ public class UserService {
 
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new CustomException(ErrorCode.DUPLICATED_USER);
         }
 
         UserRoleEnum role = UserRoleEnum.USER;
 
         if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
             }
             role = UserRoleEnum.ADMIN;
         }
@@ -77,12 +79,12 @@ public class UserService {
 
         // 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_USER)
         );
 
         // 비밀번호 확인
         if(!passwordEncoder.matches(password, user.getPassword())){
-            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.WRONG_PASSWORD);
         }
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
