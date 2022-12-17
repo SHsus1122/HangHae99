@@ -27,7 +27,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ExceptionHandlerConfig extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {CustomException.class})
+    // protected 쓴 이유는 상속을받는 녀석 말고는 사용하지 않기 위해서
+    @ExceptionHandler(value = {CustomException.class})  // 익셉션할 클래스 지정
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
         return ErrorResponse.toResponseEntity(ex.getErrorCode());
     }

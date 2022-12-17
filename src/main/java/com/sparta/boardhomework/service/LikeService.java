@@ -1,6 +1,8 @@
 package com.sparta.boardhomework.service;
 
 import com.sparta.boardhomework.entity.*;
+import com.sparta.boardhomework.exception.CustomException;
+import com.sparta.boardhomework.exception.ErrorCode;
 import com.sparta.boardhomework.repository.BoardLikeRepository;
 import com.sparta.boardhomework.repository.BoardRepository;
 import com.sparta.boardhomework.repository.CommentLikeRepository;
@@ -22,7 +24,7 @@ public class LikeService {
     public void addBoardLike(User user, Long id) {
 
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
         );
 
         // 유저 ID , 게시글 ID , 좋아요 ID
@@ -45,11 +47,11 @@ public class LikeService {
     public void addCommentLike(User user, Long boardId, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT)
         );
 
         Board board = boardRepository.findByBoardId(boardId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시글 입니다.")
+                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD)
         );
 
         if (commentLikeRepository.findByUserAndComment(user, comment).isEmpty()) {

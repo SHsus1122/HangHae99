@@ -1,6 +1,5 @@
 package com.sparta.boardhomework.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +20,7 @@ public class BoardLike {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "boardId")
     private Board board;
 
     public BoardLike(User user, Board board) {

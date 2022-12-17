@@ -1,8 +1,6 @@
 package com.sparta.boardhomework.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.boardhomework.dto.BoardRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,7 +73,6 @@ public class Board extends TimeStamped {
         this.username = username;
         this.password = password;
     }
-
 
 }
 

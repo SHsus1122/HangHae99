@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum ErrorCode {
     // 400 Bad Request : 잘못된 요청
-    DUPLICATED_BOARD(BAD_REQUEST,  "중복된 게시글이 존재합니다."),
+//    DUPLICATED_BOARD(BAD_REQUEST,  "중복된 게시글이 존재합니다."),
     DUPLICATED_USER(BAD_REQUEST, "중복된 닉네임이 존재합니다."),
 
 

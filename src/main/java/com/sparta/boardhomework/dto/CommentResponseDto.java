@@ -1,13 +1,10 @@
 package com.sparta.boardhomework.dto;
 
 import com.sparta.boardhomework.entity.Comment;
-import com.sparta.boardhomework.entity.CommentLike;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor

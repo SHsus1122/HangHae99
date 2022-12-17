@@ -1,9 +1,6 @@
 package com.sparta.boardhomework.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.boardhomework.dto.CommentRequestDto;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,4 +45,7 @@ public class Comment extends TimeStamped {
         this.username = user.getUsername();
     }
 
+    public void update(CommentRequestDto requestDto) {
+        this.cmtCnt = requestDto.getCmtCnt();
+    }
 }

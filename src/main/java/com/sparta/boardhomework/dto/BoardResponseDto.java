@@ -1,7 +1,6 @@
 package com.sparta.boardhomework.dto;
 
 import com.sparta.boardhomework.entity.Board;
-import com.sparta.boardhomework.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

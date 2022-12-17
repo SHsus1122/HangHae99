@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 public class CommentService {
 
     private final BoardRepository boardRepository;
-
     private final CommentRepository commentRepository;
 
     @Transactional
@@ -40,17 +39,20 @@ public class CommentService {
     @Transactional
     public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
 
-        Board board = boardRepository.findByBoardId(id).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_BOARD));
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        if (user.getRole() == UserRoleEnum.ADMIN || board.getUsername().equals(user.getUsername())) {
-            Comment comment = commentRepository.save(new Comment(requestDto, board, user));
+        if (user.getRole() == UserRoleEnum.ADMIN || comment.getUsername().equals(user.getUsername())) {
+            // 영속성 컨텍스트 더티 체킹
+            // @Transactional 이게 없으면 업데이트가 안되는데 왜 안되는지 <- ***
+            comment.update(requestDto);
             return new CommentResponseDto(comment);
         } else {
             throw new CustomException(ErrorCode.INVALID_AUTH_COMMENT);
         }
 
     }
+
 
     @Transactional
     public PassResponseDto deleteComment(Long id, User user) {
