@@ -1,0 +1,26 @@
+class Solution {
+    public int[][] solution(int[][] arr1, int[][] arr2) {
+        // 문제 10
+        // 행렬의 덧셈은 행과 열의 크기가 같은 두 행렬의 같은 행, 같은 열의 값을 서로 더한 결과가 됩니다.
+        // 2개의 행렬 arr1과 arr2를 입력받아, 행렬 덧셈의 결과를 반환하는 함수, solution을 완성해주세요.
+    
+        int[][] answer = new int[arr1.length][arr1[0].length];
+        // arr1 이 1,2 / 2,3 이고 arr2 이 3,4 / 5,6 이라고 가정하면
+        // answer = int[2][2] 가 된다. 이를 아래의 반복문에 대입하면
+        // for (0 < 2) 안에 for (0 < 2) 이런식으로 반복한다.
+        // 이를 for 문 결과로 answer[][] 에 담게 되면
+        // arr1[0][0] + arr2[0][0]  =>  1 + 3 = 4
+        // arr1[0][1] + arr2[0][1]  =>  2 + 4 = 6
+        // arr1[1][0] + arr2[1][0]  =>  2 + 5 = 7
+        // arr1[1][1] + arr2[1][1]  =>  3 + 6 = 9
+        // 이것을 answer[2][2] 에 순차적으로 들어간다.
+        // answer[0][0] = 4 / answer[0][1] = 6
+        // answer[1][0] = 7 / answer[1][1] = 9
+        for (int i = 0; i < arr1.length; i++) {
+            for (int j = 0; j < arr1[i].length; j++) {
+                answer[i][j] = arr1[i][j] +arr2[i][j];
+            }
+        }
+        return answer;
+    }
+}

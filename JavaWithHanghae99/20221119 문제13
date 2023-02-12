@@ -1,0 +1,26 @@
+import java.util.Calendar;
+
+class Solution {
+    public String solution(int a, int b) {
+        // 문제 13
+        // 2016년 1월 1일은 금요일입니다. 2016년 a월 b일은 무슨 요일일까요? 
+        // 두 수 a ,b를 입력받아 2016년 a월 b일이 무슨 요일인지 리턴하는 함수,
+        // solution을 완성하세요. 요일의 이름은 일요일부터 토요일까지 각각 SUN,MON,TUE,WED,THU,FRI,SAT
+        // 입니다. 예를 들어 a=5, b=24라면 5월 24일은 화요일이므로 문자열 "TUE"를 반환하세요.
+    
+        // Calendar 원하는 날짜를 구하기 위한 함수 선언
+        Calendar cal = Calendar.getInstance();
+        
+        // 원하는 년월일로 설정
+        // 월은 0 부터 시작하기 때문에 -1 을 해 주어야 함
+        // 해당 요일의 날짜의 숫자를 구함 요일은 일요일부터 1 ~ 7
+        // answer 에 들어갈 요일은 받아온 숫자로 부터 -1 을 해주어야함
+        // 왜냐하면 for 문은 0 부터 시작하기 때문
+        cal.set(2016, a - 1, b);
+        int day_num = cal.get(Calendar.DAY_OF_WEEK);
+        String[] day = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+        String answer = day[day_num - 1];
+        
+        return answer;
+    }
+}

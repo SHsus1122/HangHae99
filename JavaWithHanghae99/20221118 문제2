@@ -1,0 +1,13 @@
+class Solution {
+    public String solution(int num) {
+        // 문제 2
+        // 정수 num이 짝수일 경우 "Even"을 반환하고 홀수인 경우 "Odd"를 반환하는 함수, solution을 완성해주세요.
+        String answer = "";
+        if (num % 2 == 0) {
+            answer = "Even";  // num 을 2 로 나눈 값이 0 이면 짝수 이기에 answer 문자 리터럴을 Even 으로 한다.
+        } else {
+            answer = "Odd";   // 그 외의 경우는 1 이라 홀수 이기에 answer 문자 리터럴을 Odd 로 한다.
+        }
+        return answer;
+    }
+}

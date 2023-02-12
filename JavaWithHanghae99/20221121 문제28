@@ -1,0 +1,50 @@
+class Solution {
+    // 문제 28
+    // // 1937년 Collatz란 사람에 의해 제기된 이 추측은, 주어진 수가 1이 될 때까지 다음 작업을 반복하면,
+    // 모든 수를 1로 만들 수 있다는 추측입니다. 작업은 다음과 같습니다.
+
+    // 1-1. 입력된 수가 짝수라면 2로 나눕니다.
+    // 1-2. 입력된 수가 홀수라면 3을 곱하고 1을 더합니다.
+    // 2. 결과로 나온 수에 같은 작업을 1이 될 때까지 반복합니다.
+    // 예를 들어, 주어진 수가 6이라면 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1 이 되어 총 8번 만에 1이 됩니다.
+    // 위 작업을 몇 번이나 반복해야 하는지 반환하는 함수, solution을 완성해 주세요.
+    // 단, 주어진 수가 1인 경우에는 0을, 작업을 500번 반복할 때까지 1이 되지 않는다면 –1을 반환해 주세요.
+
+    // 제한 사항
+    // 입력된 수, num은 1 이상 8,000,000 미만인 정수입니다.
+    
+    public Long solution(int num) {
+        long answer = num;  // 리턴해줄 변숫를 선언하고 변수에 받아온 값을 넣기
+        int count = 0;      // 횟수를 카운팅할 변수 선언
+        for (int i = 0; i < 600; i++) {
+            // 반복문은 기본 600(제한설정만 해주면 상관없음) 번 돌린다.
+            // answer 이 1 이면 test 에 총 카운팅한 횟수를 넣어주고 리턴한다.
+            // 하지만 count 가 int 타입이기 때문에 형변환을 먼저 해준다.
+            // 이후 break 로 반복문을 멈춘다.
+            if (answer == 1) {
+                Long test = Long.valueOf(count);
+                answer = test;
+                break;
+            } else if (count == 500) {
+                // 카운트가 500 회가 되면 answer 에 -1을 리턴한다.
+                // 이 때도 break 로 반복문 멈추기
+                answer = -1;
+                break;
+            }
+            if (answer % 2 == 0) {
+                // answer 가 양수 이면 2로 나눈 값을 answer 에 넣는다.
+                // 이후 카운트를 증가시키고 continue 로 다시 반복문을 시작
+                answer = answer / 2;
+                count++;
+                continue;
+            } else if (answer % 2 != 0) {
+                // answer 가 홀수 이면 answer에 3을 곱하고 1을 증가 시킨다.
+                // 이후 카운트를 증가시키고 continue 로 다시 반복문을 시작
+                answer = (answer * 3) + 1;
+                count++;
+                continue;
+            }
+        }
+        return answer;
+    }
+}

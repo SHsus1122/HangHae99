@@ -1,0 +1,29 @@
+class Solution {
+        // 양의 정수 x가 하샤드 수이려면 x의 자릿수의 합으로 x가 나누어져야 합니다. 
+        // 예를 들어 18의 자릿수 합은 1+8=9이고, 18은 9로 나누어 떨어지므로 18은 하샤드 수입니다. 
+        // 자연수 x를 입력받아 x가 하샤드 수인지 아닌지 검사하는 함수, solution을 완성해주세요.
+
+        // 제한 조건
+        // x는 1 이상, 10000 이하인 정수입니다.
+        
+    public boolean solution(int x) {
+        boolean answer = true;      // 기본값은 true 를 반환
+        // x 의 길이를 구하기 위해 문자열 형변환
+        // 합을 누적시켜줄 sum 선언(자릿수를 담는 변수)
+        String str = Integer.toString(x);
+        int sum = 0;
+
+        // x 의 길이만큼 반복한다.
+        // sum 에다가 x 의 첫번째부터 숫자를 빼와서 누적시킨다.
+        // 이 때 str 은 문자열이기 때문에 형변환을 해줘서 누적시킨다.
+        // 결과 x 를 자릿수만큼 나눴을 때 0 이 아니면 나누어 떨어지지 않으므로
+        // answer 는 false 로 리턴한다.
+        for (int i = 0; i < str.length(); i++) {
+            sum += Integer.parseInt(str.substring(i, i+1));
+        }
+        if (x % sum != 0) {
+            answer = false;
+        }
+        return answer;
+    }
+}
